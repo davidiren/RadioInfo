@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Flow;
 
 public class Gui {
 
     private JFrame frame;
+    private JPanel upperPanel;
+    private JPanel middlePanel;
+    private JPanel lowerPanel;
 
     public Gui(){
         frame = new JFrame("RadioInfo");
@@ -13,9 +15,9 @@ public class Gui {
         frame.setJMenuBar(buildMenuBar());
 
         //Build panels
-        JPanel upperPanel = buildUpperPanel();
-        JPanel middlePanel = buildMiddlePanel();
-        JPanel lowerPanel = buildLowerPanel();
+        upperPanel = buildUpperPanel();
+        middlePanel = buildMiddlePanel();
+        lowerPanel = buildLowerPanel();
 
         //add to frame
         frame.add(upperPanel);
@@ -53,8 +55,20 @@ public class Gui {
 
     private JPanel buildMiddlePanel() {
         JPanel middlePanel = new JPanel();
-        middlePanel.setLayout(new GridLayout());
+        middlePanel.setLayout(new BorderLayout());
+        middlePanel.add(buildProgramPanel(), BorderLayout.CENTER);
         return middlePanel;
+    }
+
+    private JPanel buildProgramPanel() {
+        JPanel programPanel = new JPanel();
+        programPanel.setLayout((new GridLayout(2, 2, 30, 50)));
+        int nrOfPrograms = 4;
+        for (int i = 0; i < nrOfPrograms; i++){
+            programPanel.add(new JButton("P"+i));
+        }
+
+        return programPanel;
     }
 
     private JPanel buildLowerPanel() {
