@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.Flow;
 
 public class Gui {
 
@@ -28,15 +29,32 @@ public class Gui {
     }
 
     private JMenuBar buildMenuBar() {
-        return null;
+        JMenuBar menuBar = new JMenuBar();
+        //make menu options
+        JMenu archive = new JMenu("Arkiv");
+        JMenuItem archiveItem1 = new JMenuItem("Val ett");
+        JMenuItem archiveItem2 = new JMenuItem("Val två");
+        JMenuItem archiveItem3 = new JMenuItem("Val tre");
+        archive.add(archiveItem1);
+        archive.add(archiveItem2);
+        archive.add(archiveItem3);
+        //Second menu option
+        JMenu help = new JMenu("Hjälp");
+        menuBar.add(archive);
+        menuBar.add(help);
+        return menuBar;
     }
 
     private JPanel buildUpperPanel() {
-        return null;
+        JPanel upperPanel = new JPanel();
+        upperPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        return upperPanel;
     }
 
     private JPanel buildMiddlePanel() {
-        return null;
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new GridLayout());
+        return middlePanel;
     }
 
     private JPanel buildLowerPanel() {
