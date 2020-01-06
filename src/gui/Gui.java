@@ -104,7 +104,12 @@ public class Gui {
         int nrOfPrograms = 4;
         programPanel.setLayout((new GridLayout(nrOfPrograms/2, 2, 30, 30)));
         for (int i = 0; i < nrOfPrograms; i++){
-            programPanel.add(new JButton("P"+(i+1)));
+
+            JButton temp = new JButton("P"+(i +1));
+            Image im = ImageLoader.getImageLoader().getScaledImage(
+                    "images/p"+(i +1)+".jpg", 300, 180);
+            temp.setIcon(new ImageIcon(im));
+            programPanel.add(temp);
         }
 
         return programPanel;
