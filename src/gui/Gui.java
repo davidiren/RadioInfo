@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 
 public class Gui {
 
@@ -12,11 +13,11 @@ public class Gui {
     private JPanel middlePanel;
     private JPanel lowerPanel;
 
-
+    HashMap<String,JButton> programButtons = new HashMap<>();
     //Menu items
-    JMenuItem archiveItem1;
-    JMenuItem archiveItem2;
-    JMenuItem exit;
+    private JMenuItem archiveItem1;
+    private JMenuItem archiveItem2;
+    private JMenuItem exit;
 
     /**
      * Constructor
@@ -105,14 +106,15 @@ public class Gui {
         programPanel.setLayout((new GridLayout(nrOfPrograms/2, 2, 30, 30)));
         for (int i = 0; i < nrOfPrograms; i++){
 
-            JButton temp = new JButton("P"+(i +1));
+            JButton temp = new JButton();
             Image im = ImageLoader.getImageLoader().getScaledImage(
                     "images/p"+(i +1)+".jpg", 300, 180);
             temp.setIcon(new ImageIcon(im));
+            programButtons.put("p"+(i+1), temp);
             programPanel.add(temp);
         }
 
-        return programPanel;
+            return programPanel;
     }
 
     /**
