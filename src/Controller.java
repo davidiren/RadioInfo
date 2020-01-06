@@ -11,15 +11,23 @@ public class Controller {
     }
 
     public void setupGui() {
-        MakeActionListenerToExit();
+        makeActionListenerToExit();
+        makeActionListenerToPrograms();
 
-        gui.show();
+        gui.showStartFrame();
     }
 
-    private void MakeActionListenerToExit(){
+    private void makeActionListenerToExit(){
         ActionListener exitAction = e -> {
             gui.closeProgram();
         };
         gui.addActionListenerToExit(exitAction);
+    }
+    private void makeActionListenerToPrograms(){
+        ActionListener actionListener = e ->{
+            gui.changeToTableOfPrograms(e.getSource());
+
+        };
+        gui.addActionListenerToPrograms(actionListener);
     }
 }
