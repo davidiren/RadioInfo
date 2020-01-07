@@ -1,9 +1,11 @@
 import gui.Gui;
+import model.SverigesRadio;
 
 import java.awt.event.ActionListener;
 
 public class Controller {
     private Gui gui;
+    private SverigesRadio sverigesRadio;
 
 
     public Controller(){
@@ -13,7 +15,6 @@ public class Controller {
     public void setupGui() {
         makeActionListenerToExit();
         makeActionListenerToPrograms();
-
         gui.showStartFrame();
     }
 

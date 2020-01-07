@@ -150,14 +150,16 @@ public class Gui {
      * @param actionListener - ActionListener to add
      */
     public void addActionListenerToExit(ActionListener actionListener){
-        SwingUtilities.invokeLater(() -> exit.addActionListener(actionListener));
+        SwingUtilities.invokeLater(() ->
+                exit.addActionListener(actionListener));
     }
 
     /**
      * Closes the program
      */
     public void closeProgram() {
-        SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
+        SwingUtilities.invokeLater(() -> frame.dispatchEvent(
+                new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
     }
 
     public void addActionListenerToPrograms(ActionListener actionListener) {

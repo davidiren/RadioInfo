@@ -1,6 +1,7 @@
 package model;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Channel {
     private int id;
@@ -11,9 +12,13 @@ public class Channel {
     private URL siteURL;
     private URL scheduleURL;
     private String channelType;
+    private ArrayList<Episode> episodeList = new ArrayList<>();
 
+
+    /**
+     * Consturctor, where you have to initialize values later
+     */
     public Channel(){
-
     }
 
     public int getId() {
@@ -78,5 +83,13 @@ public class Channel {
 
     public void setChannelType(String channelType) {
         this.channelType = channelType;
+    }
+
+    public ArrayList<Episode> getEpisodeList() {
+        return episodeList;
+    }
+
+    public void setEpisodeList(ArrayList<Episode> episodeList) {
+        this.episodeList = episodeList;
     }
 }
