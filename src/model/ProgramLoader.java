@@ -36,7 +36,8 @@ public class ProgramLoader {
             }while (!handler.isFinished());
             channelList = handler.getChannelList();
 
-            URL episodesURL;
+            //Adds all episodes to all channels
+            /*URL episodesURL;
             for (Channel channel : channelList) {
                 episodesURL = channel.getScheduleURL();
                 do {
@@ -45,7 +46,7 @@ public class ProgramLoader {
                     episodesURL = episodeHandler.getNextPage();
                 } while (!episodeHandler.isFinished());
                 channel.setEpisodeList(episodeHandler.getEpisodeList());
-            }
+            }*/
 
         } catch (ParserConfigurationException pce) {
             System.err.println("Cannot create parser");

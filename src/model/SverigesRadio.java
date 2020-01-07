@@ -15,4 +15,8 @@ public class SverigesRadio {
         programLoader.parsePrograms();
         channelList = programLoader.getChannelList();
     }
+
+    public ArrayList<Channel> getChannelList() {
+        return channelList;
+    }
 }

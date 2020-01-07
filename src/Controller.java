@@ -1,18 +1,28 @@
 import gui.Gui;
+import model.Channel;
 import model.SverigesRadio;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Controller {
     private Gui gui;
-    private SverigesRadio sverigesRadio;
+    private SverigesRadio sverigesRadio = new SverigesRadio();
 
 
     public Controller(){
-        gui = new Gui();
     }
 
-    public void setupGui() {
+    public void setupModel(){
+        sverigesRadio.setUp();
+    }
+
+    public ArrayList<Channel> getChannels(){
+        return sverigesRadio.getChannelList();
+    }
+
+    public void setupGui(ArrayList<Channel> channels) {
+        gui = new Gui(channels);
         makeActionListenerToExit();
         makeActionListenerToPrograms();
         gui.showStartFrame();

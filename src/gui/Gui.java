@@ -1,5 +1,7 @@
 package gui;
 
+import model.Channel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -16,8 +18,10 @@ public class Gui {
     private JPanel srPanel;
     private JPanel programPanel;
     private JPanel lowerPanel;
+    private JScrollPane scroll;
     //HashMap<String,JButton> programButtons = new HashMap<>();
-    ArrayList<JButton> programButtons = new ArrayList<>();
+    private ArrayList<JButton> programButtons = new ArrayList<>();
+    private ArrayList<Channel> channels;
 
     //Menu items
     private JMenuItem archiveItem1;
@@ -29,7 +33,9 @@ public class Gui {
      *
      * puts all the gui components together
      */
-    public Gui(){
+    public Gui(ArrayList<Channel> channels){
+        this.channels = channels;
+
         cardLayout = new CardLayout();
 
         frame = new JFrame("RadioInfo");
@@ -42,7 +48,7 @@ public class Gui {
 
 
         //add to frame
-        frame.add(startFrame, "start");
+        frame.add((startFrame), "start");
         //frame.add(lowerPanel,"start");
 
         frame.setPreferredSize(new Dimension(600,700));
@@ -58,6 +64,7 @@ public class Gui {
 
         temp.add(srPanel, BorderLayout.NORTH);
         temp.add(programPanel, BorderLayout.CENTER);
+
 
         return temp;
     }
@@ -124,7 +131,8 @@ public class Gui {
      */
     private JPanel buildProgramPanel() {
         JPanel programPanel = new JPanel();
-        int nrOfPrograms = 4;
+
+        int nrOfPrograms = channels.size();
         programPanel.setLayout((new GridLayout(nrOfPrograms/2, 2, 30, 30)));
         for (int i = 0; i < nrOfPrograms+8; i++){
             JButton temp = new JButton(Integer.toString(i));
