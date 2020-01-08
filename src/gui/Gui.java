@@ -3,11 +3,11 @@ package gui;
 import model.Channel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Gui {
 
@@ -18,7 +18,8 @@ public class Gui {
     private JPanel srPanel;
     private JPanel programPanel;
     private JPanel lowerPanel;
-    private JScrollPane scroll;
+    private JScrollPane channelScroll;
+    private JScrollPane programScroll;
     //HashMap<String,JButton> programButtons = new HashMap<>();
     private ArrayList<JButton> programButtons = new ArrayList<>();
     private ArrayList<Channel> channels;
@@ -46,7 +47,6 @@ public class Gui {
         //Build frames
         startFrame = buildStartFrame();
 
-
         //add to frame
         frame.add((startFrame), "start");
         //frame.add(lowerPanel,"start");
@@ -58,12 +58,17 @@ public class Gui {
 
     private JPanel buildStartFrame() {
         JPanel temp = new JPanel();
+        temp.setLayout(new BorderLayout());
         srPanel = buildSRPanel();
-        programPanel = buildProgramPanel();
-        lowerPanel = buildLowerPanel();
+        //programPanel = buildProgramPanel();
+        channelScroll = buildChannelTable();
+        programScroll = buildProgramsTableForAChannel();
+
 
         temp.add(srPanel, BorderLayout.NORTH);
-        temp.add(programPanel, BorderLayout.CENTER);
+        //temp.add(programPanel, BorderLayout.CENTER);
+        temp.add(channelScroll, BorderLayout.WEST);
+        temp.add(programScroll, BorderLayout.CENTER);
 
 
         return temp;
@@ -76,6 +81,30 @@ public class Gui {
             currentFrame = "start";
         });
     }
+
+    public JScrollPane buildChannelTable(){
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+        model.addColumn("Radio Kanal");
+        for(int i = 0; i < channels.size(); i++){
+            model.insertRow(i, new Object[] {channels.get(i).getName()});
+        }
+        //TODO: Make table less wide
+        //table.getColumn("Radio Kanal").setPreferredWidth(100);
+        JScrollPane scrollPane = new JScrollPane(table);
+        return scrollPane;
+    }
+
+    public JScrollPane buildProgramsTableForAChannel(){
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+        model.addColumn("Program");
+        model.addColumn("Start");
+        model.addColumn("Slut");
+        JScrollPane scrollPane = new JScrollPane(table);
+        return scrollPane;
+    }
+
 
     /**
      * Builds the Menu Bar
