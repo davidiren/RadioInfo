@@ -4,6 +4,8 @@ import model.SverigesRadio;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Controller {
     private Gui gui;
@@ -17,11 +19,11 @@ public class Controller {
         sverigesRadio.setUp();
     }
 
-    public ArrayList<Channel> getChannels(){
-        return sverigesRadio.getChannelList();
+    public LinkedHashMap<String, Channel> getChannels(){
+        return sverigesRadio.getChannelsList();
     }
 
-    public void setupGui(ArrayList<Channel> channels) {
+    public void setupGui(LinkedHashMap<String, Channel> channels) {
         gui = new Gui(channels);
         makeActionListenerToExit();
         makeActionListenerToPrograms();

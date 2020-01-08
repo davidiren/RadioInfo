@@ -1,13 +1,15 @@
 package gui;
 
 import model.Channel;
+import model.Episode;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Gui {
 
@@ -19,10 +21,18 @@ public class Gui {
     private JPanel programPanel;
     private JPanel lowerPanel;
     private JScrollPane channelScroll;
+
+    private DefaultTableModel channelModel;
+    private JTable channelTable;
+
+    private DefaultTableModel programModel;
+    private JTable programTable;
     private JScrollPane programScroll;
+
+    private JButton update;
     //HashMap<String,JButton> programButtons = new HashMap<>();
     private ArrayList<JButton> programButtons = new ArrayList<>();
-    private ArrayList<Channel> channels;
+    private LinkedHashMap<String, Channel> channels;
 
     //Menu items
     private JMenuItem archiveItem1;
@@ -34,7 +44,7 @@ public class Gui {
      *
      * puts all the gui components together
      */
-    public Gui(ArrayList<Channel> channels){
+    public Gui(LinkedHashMap<String, Channel> channels){
         this.channels = channels;
 
         cardLayout = new CardLayout();
@@ -51,7 +61,7 @@ public class Gui {
         frame.add((startFrame), "start");
         //frame.add(lowerPanel,"start");
 
-        frame.setPreferredSize(new Dimension(600,700));
+        frame.setPreferredSize(new Dimension(800,900));
         frame.pack();
 
     }
@@ -62,11 +72,9 @@ public class Gui {
         srPanel = buildSRPanel();
         //programPanel = buildProgramPanel();
         channelScroll = buildChannelTable();
-        programScroll = buildProgramsTableForAChannel();
-
+        programScroll = buildProgramsTableForAChannel("P3");
 
         temp.add(srPanel, BorderLayout.NORTH);
-        //temp.add(programPanel, BorderLayout.CENTER);
         temp.add(channelScroll, BorderLayout.WEST);
         temp.add(programScroll, BorderLayout.CENTER);
 
@@ -83,26 +91,49 @@ public class Gui {
     }
 
     public JScrollPane buildChannelTable(){
-        DefaultTableModel model = new DefaultTableModel();
-        JTable table = new JTable(model);
-        model.addColumn("Radio Kanal");
-        for(int i = 0; i < channels.size(); i++){
-            model.insertRow(i, new Object[] {channels.get(i).getName()});
+        channelModel = new DefaultTableModel();
+        channelTable = new JTable(channelModel);
+        channelModel.addColumn("Radio Kanal");
+        int i = 0;
+        for(HashMap.Entry<String, Channel> entry: channels.entrySet()){
+            channelModel.insertRow(i, new Object[] {entry.getValue().getName()});
+            i++;
         }
-        //TODO: Make table less wide
-        //table.getColumn("Radio Kanal").setPreferredWidth(100);
-        JScrollPane scrollPane = new JScrollPane(table);
-        return scrollPane;
+        //TODO: Make channelTable less wide
+        //channelTable.getColumn("Radio Kanal").setPreferredWidth(100);
+        channelTable.addMouseListener(createMouseListner());
+        channelTable.setRowHeight(25);
+        return new JScrollPane(channelTable);
     }
 
-    public JScrollPane buildProgramsTableForAChannel(){
-        DefaultTableModel model = new DefaultTableModel();
-        JTable table = new JTable(model);
-        model.addColumn("Program");
-        model.addColumn("Start");
-        model.addColumn("Slut");
-        JScrollPane scrollPane = new JScrollPane(table);
-        return scrollPane;
+    private MouseListener createMouseListner() {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = channelTable.rowAtPoint(e.getPoint());
+                int col = channelTable.columnAtPoint(e.getPoint());
+                displayEpisodesFrom(channelTable.getValueAt(row, col).toString());
+            }
+        };
+    }
+
+    public JScrollPane buildProgramsTableForAChannel(String nameOfChannel){
+        programModel = new DefaultTableModel();
+        programTable = new JTable(programModel);
+        programModel.addColumn("Program");
+        programModel.addColumn("Start");
+        programModel.addColumn("Slut");
+
+        return new JScrollPane(programTable);
+    }
+
+    private void displayEpisodesFrom(String channel){
+        programModel.setRowCount(0);
+        System.out.println(channel);
+
+        /*for (Episode e:channels.indexOf()) {
+
+        }*/
     }
 
 
@@ -128,17 +159,19 @@ public class Gui {
     }
 
     /**
-     * Builds the upper panel
+     * Builds the SR picture panel, and update button
      * @return - JPanel
      */
     private JPanel buildSRPanel() {
         JPanel srPanel = new JPanel();
-        srPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        update = new JButton("Uppdatera");
+        srPanel.setLayout(new BorderLayout());
         Image img;
         img = ImageLoader.getImageLoader().getScaledImage(
                 "images/sverigesradio.jpg", 400, 100);
         JLabel pic = new JLabel(new ImageIcon(img));
-        srPanel.add(pic);
+        srPanel.add(pic, BorderLayout.CENTER);
+        srPanel.add(update, BorderLayout.EAST);
 
         return srPanel;
     }
