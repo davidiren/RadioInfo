@@ -1,8 +1,6 @@
 import model.Channel;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class RadioInfo {

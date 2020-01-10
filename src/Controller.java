@@ -1,11 +1,17 @@
 import gui.Gui;
+import gui.Updater;
 import model.Channel;
 import model.SverigesRadio;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Controller {
     private Gui gui;
@@ -16,6 +22,15 @@ public class Controller {
     }
 
     public void setupModel(){
+        ScheduledExecutorService ses =
+                Executors.newSingleThreadScheduledExecutor();
+        ses.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                update();
+            }
+        }, 1, 1, TimeUnit.HOURS);
+
         sverigesRadio.setUp();
     }
 
@@ -24,10 +39,19 @@ public class Controller {
     }
 
     public void setupGui(LinkedHashMap<String, Channel> channels) {
+
         gui = new Gui(channels);
-        makeActionListenerToExit();
-        makeActionListenerToPrograms();
+
+        setupListeners();
+
         gui.showStartFrame();
+    }
+
+    private void setupListeners() {
+        makeActionListenerToExit();
+        makeMouseListenerForChannels();
+        makeButtonListenerForUpdate();
+        makeActionListenerToHelpTextMenuOption();
     }
 
     private void makeActionListenerToExit(){
@@ -36,11 +60,50 @@ public class Controller {
         };
         gui.addActionListenerToExit(exitAction);
     }
-    private void makeActionListenerToPrograms(){
-        ActionListener actionListener = e ->{
-            gui.changeToTableOfPrograms(e.getSource());
 
+    private void makeActionListenerToHelpTextMenuOption(){
+        ActionListener help = e -> {
+            gui.showPopupHelper();
         };
-        gui.addActionListenerToPrograms(actionListener);
+        gui.addActionListenerToHelp(help);
+    }
+
+    private void makeMouseListenerForChannels() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                gui.displayEpisodes(e);
+            }
+        };
+        makeMouseListenerForEpisodes();
+        gui.addMouseListenerToChannelTable(mouseAdapter);
+    }
+
+    private void makeMouseListenerForEpisodes() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                gui.displayEpisodeDescription(e);
+            }
+        };
+        gui.addMouseListenerToEpisodeTable(mouseAdapter);
+    }
+
+    private void makeButtonListenerForUpdate(){
+        ActionListener update = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            //gui.disableUpdateButton();
+            //Updater worker = new Updater(gui);
+            //worker.execute();
+                update();
+            }
+        };
+        gui.addButtonListenerToUpdate(update);
+    }
+    private void update(){
+        gui.disableUpdateButton();
+        Updater worker = new Updater(gui);
+        worker.execute();
     }
 }

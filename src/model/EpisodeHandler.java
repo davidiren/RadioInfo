@@ -5,7 +5,13 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Stack;
 
 /**
@@ -27,8 +33,7 @@ public class EpisodeHandler extends DefaultHandler {
                              Attributes attr) {
         this.elementStack.push(qName);
         if ("scheduledepisode".equals(qName)) {
-            Episode episode = new Episode();
-            episodeList.add(episode);
+            episodeList.add(new Episode());
         }
         if ("program".equals(qName)) {
             episodeList.get(indexOfCurrentEpisode)
@@ -36,6 +41,10 @@ public class EpisodeHandler extends DefaultHandler {
                             attr.getValue("id")));
             episodeList.get(indexOfCurrentEpisode)
                     .setProgramName(attr.getValue("name"));
+        }
+        if ("schedule".equals(qName)){
+            episodeList.clear();
+            indexOfCurrentEpisode = 0;
         }
     }
 
@@ -51,6 +60,7 @@ public class EpisodeHandler extends DefaultHandler {
         this.elementStack.pop();
         // A level has been made, move to levelList
         if ("scheduledepisode".equals(qName)) {
+            //hasEpisodeAired();
             indexOfCurrentEpisode++;
         }
         if ("sr".equals(qName)) {
@@ -58,6 +68,37 @@ public class EpisodeHandler extends DefaultHandler {
             if (pageNr > nrOfPages){
                 finished = true;
             }
+        }
+    }
+
+    private void hasEpisodeAired() {
+        //LocalDateTime now = LocalDateTime.now();
+
+        try {
+            Date today = new Date();
+            String strDateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+            SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+            String formatedToday = sdf.format(today);
+
+            Date now = sdf.parse(formatedToday);
+
+            String endTime =
+                    episodeList.get(indexOfCurrentEpisode).getEndTime();
+            String epDate = endTime.substring(0, endTime.indexOf("Z"));
+            Date ep;
+            SimpleDateFormat another = new SimpleDateFormat(strDateFormat);
+                    ep = another.parse(epDate);
+
+            if (now.compareTo(ep) > 0) {
+                episodeList.get(indexOfCurrentEpisode).setAlreadyShown(true);
+            } else if (now.compareTo(ep) < 0) {
+                episodeList.get(indexOfCurrentEpisode).setAlreadyShown(false);
+            } else {
+                episodeList.get(indexOfCurrentEpisode).setAlreadyShown(true);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -103,8 +144,8 @@ public class EpisodeHandler extends DefaultHandler {
             }
         }catch (MalformedURLException e) {
             System.out.println("malformedURL: "+e.getLocalizedMessage());
-            e.printStackTrace();
-            System.exit(0);
+            //e.printStackTrace();
+            //System.exit(0);
         }
     }
 

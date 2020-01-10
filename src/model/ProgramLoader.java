@@ -6,7 +6,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -32,21 +34,26 @@ public class ProgramLoader {
             do {
                 parser.parse(new InputSource(site.openStream()), handler);
                 site = handler.getNextPage();
-
             }while (!handler.isFinished());
             channelList = handler.getChannelList();
 
             //Adds all episodes to all channels
-            /*URL episodesURL;
+            URL episodesURL;
+            String episodeString;
+            String paginationFalse = "&pagination=false";
             for (Channel channel : channelList) {
-                episodesURL = channel.getScheduleURL();
-                do {
-                    parser.parse(new InputSource(episodesURL.openStream()),
-                            episodeHandler);
-                    episodesURL = episodeHandler.getNextPage();
-                } while (!episodeHandler.isFinished());
-                channel.setEpisodeList(episodeHandler.getEpisodeList());
-            }*/
+                if (channel.getScheduleURL() == (null)){
+                    continue;
+                }
+                episodeString = channel.getScheduleURL().toString();
+                episodeString = episodeString + paginationFalse;
+                episodesURL = new URL(episodeString);
+                System.out.println(channel.getName());
+                parser.parse(new InputSource(episodesURL.openStream()),
+                        episodeHandler);
+
+                channel.setEpisodeList(new ArrayList<>(episodeHandler.getEpisodeList()));
+            }
 
         } catch (ParserConfigurationException pce) {
             System.err.println("Cannot create parser");
@@ -54,9 +61,14 @@ public class ProgramLoader {
         } catch (SAXException se) {
             System.err.println("SAX error");
             se.printStackTrace();
-        } catch (IOException ioe) {
-            System.err.println("IO error");
-            ioe.printStackTrace();
+        } catch (FileNotFoundException fne) {
+            System.out.println("WebbPage does not exist");
+        } catch (NullPointerException npe){
+            System.out.println("this channel has no table");
+        } catch (MalformedURLException e) {
+            System.out.println("MalformedURL");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

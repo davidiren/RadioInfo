@@ -13,6 +13,7 @@ public class Episode {
     private int programId;
     private String programName;
     private URL imageURL;
+    private boolean alreadyShown;
 
     public Episode(){
 
@@ -80,5 +81,13 @@ public class Episode {
 
     public void setImageURL(URL imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public boolean getAlreadyShown() {
+        return alreadyShown;
+    }
+
+    public void setAlreadyShown(boolean alreadyShown) {
+        this.alreadyShown = alreadyShown;
     }
 }
