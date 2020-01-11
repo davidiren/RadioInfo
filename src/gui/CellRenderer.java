@@ -1,18 +1,33 @@
 package gui;
 
-import model.Episode;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Class: CellRenderer
+ *
+ * @author David Irén
+ *
+ * Class is used to color rows
+ */
 class CellRenderer extends DefaultTableCellRenderer {
 
+    /**
+     * Method will compare endtime of an episode
+     * with the current time to determine if that
+     * episode has already aired or not
+     * @param table - JTable
+     * @param value - Object
+     * @param isSelected - boolean
+     * @param hasFocus - boolean
+     * @param row - int
+     * @param column - int
+     * @return Component
+     */
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected,
             boolean hasFocus, int row, int column) {

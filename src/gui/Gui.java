@@ -2,14 +2,20 @@ package gui;
 
 import model.Channel;
 import model.Episode;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+
+/**
+ * Class: Gui
+ *
+ * @author - David Irén
+ *
+ * Does everything related to the gui
+ */
 
 public class Gui {
 
@@ -48,32 +54,30 @@ public class Gui {
      */
     public Gui(LinkedHashMap<String, Channel> channels){
         this.channels = channels;
-
         cardLayout = new CardLayout();
-
         frame = new JFrame("RadioInfo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(cardLayout);
         frame.setJMenuBar(buildMenuBar());
-
-        //Build frames
+        //Build frame
         startFrame = buildStartFrame();
-
         //add to frame
         frame.add((startFrame), "start");
-
         frame.setPreferredSize(new Dimension(1400,900));
         frame.pack();
 
     }
 
+    /**
+     * build gui panel
+     * @return - JPanel to show
+     */
     private JPanel buildStartFrame() {
         JPanel temp = new JPanel();
         temp.setLayout(new BorderLayout());
         srPanel = buildSRPanel();
         channelScroll = buildChannelTable();
-        programScroll = buildProgramsTableForAChannel("P3");
-        programTable.setRowHeight(20);
+        programScroll = buildProgramsTableForAChannel();
         buildEpisodeDescriptionPanel();
 
         temp.add(srPanel, BorderLayout.NORTH);
@@ -85,6 +89,9 @@ public class Gui {
         return temp;
     }
 
+    /**
+     * build Episode description panel
+     */
     private void buildEpisodeDescriptionPanel() {
         episodeDescriptionPanel = new JPanel();
         episodeDescriptionPanel.setLayout(new BorderLayout());
@@ -99,6 +106,9 @@ public class Gui {
 
     }
 
+    /**
+     * Make the gui visible
+     */
     public void showStartFrame(){
         SwingUtilities.invokeLater(() -> {
             cardLayout.show(frame.getContentPane(), "start");
@@ -107,6 +117,10 @@ public class Gui {
         });
     }
 
+    /**
+     * Build channel-table and display all channels
+     * @return - JScrollPane with channel-table
+     */
     public JScrollPane buildChannelTable(){
         channelModel = new DefaultTableModel();
         channelTable = new JTable(channelModel);
@@ -120,21 +134,23 @@ public class Gui {
             channelModel.insertRow(i, new Object[] {entry.getValue().getName()});
             i++;
         }
-        //TODO: Make channelTable less wide
-        //channelTable.getColumn("Radio Kanal").setPreferredWidth(100);
-        //channelTable.addMouseListener(createMouseListenerForChannels());
         channelTable.setRowHeight(25);
         return new JScrollPane(channelTable);
     }
 
-
-    public JScrollPane buildProgramsTableForAChannel(String nameOfChannel){
+    /**
+     * Build episode-table columns and add renderer
+     * @return - JScrollPane with episode table
+     */
+    public JScrollPane buildProgramsTableForAChannel(){
         programModel = new EpisodeTableModel();
         programTable = new JTable(programModel);
         programModel.addColumn("Program");
         programModel.addColumn("Start");
         programModel.addColumn("Slut");
+        programTable.setRowHeight(25);
 
+        //add renderer that can color cells
         for (int i =0; i<programModel.getColumnCount();i++) {
             programTable.setDefaultRenderer(programTable.getColumnClass(i),
                     new CellRenderer());
@@ -143,6 +159,10 @@ public class Gui {
         return new JScrollPane(programTable);
     }
 
+    /**
+     * Display episodes from a channel
+     * @param channel - channel to show episodes from
+     */
     private synchronized void displayEpisodesFrom(String channel){
         programModel.setRowCount(0);
         System.out.println(channel);
@@ -161,7 +181,6 @@ public class Gui {
         }
 
     }
-
 
     /**
      * Builds the Menu Bar
@@ -202,25 +221,14 @@ public class Gui {
     }
 
     /**
-     * Builds the middle panel
-     * @return - JPanel
-     */
-    private JPanel buildMiddlePanel() {
-        JPanel middlePanel = new JPanel();
-        middlePanel.setLayout(new BorderLayout());
-        return middlePanel;
-    }
-
-
-    /**
-     * Builds the lower panel
-     *
+     * Display information from an episode
+     * @param episode - episode to display info from
      */
     private void updateEpisodeDescriptionPanel(Episode episode) {
         Image img;
         img = ImageLoader.getImageLoader().getScaledImageFromUrl(
                 episode.getImageURL(), 200, 200);
-        episodeImage.setIcon(new ImageIcon(img));// = new JLabel(new ImageIcon(img));
+        episodeImage.setIcon(new ImageIcon(img));
         episodeDescription.selectAll();
         episodeDescription.replaceSelection(episode.getTitle()+": \n\n");
         episodeDescription.append(episode.getDescription());
@@ -243,20 +251,32 @@ public class Gui {
                 new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
     }
 
+    /**
+     * Add listener to help button in the menu-bar
+     * @param actionListener - listener to add
+     */
     public void addActionListenerToHelp(ActionListener actionListener){
         SwingUtilities.invokeLater(() ->
                 helptext.addActionListener(actionListener));
     }
 
+    /**
+     * Add mouse listener to channel table
+     * @param mouseAdapter - mouse adapter to add
+     */
     public void addMouseListenerToChannelTable(MouseAdapter mouseAdapter) {
         SwingUtilities.invokeLater(() ->
             channelTable.addMouseListener(mouseAdapter));
     }
 
+    /**
+     * Display episodes from a channel
+     * @param event - MouseEvent
+     */
     public synchronized void displayEpisodes(MouseEvent event) {
         SwingUtilities.invokeLater(() -> {
             int row = channelTable.rowAtPoint(event.getPoint());
-            int col = 0; //Only one column
+            int col = 0; //first column has name of ep
             displayEpisodesFrom(channelTable.getValueAt(row, col).toString());
             currentChannelShown =
                     channelTable.getValueAt(row, col).toString();
@@ -264,11 +284,19 @@ public class Gui {
 
     }
 
+    /**
+     * Add a mouse listener to the episode table
+     * @param mouseAdapter - mouse adapter to add
+     */
     public void addMouseListenerToEpisodeTable(MouseAdapter mouseAdapter) {
         SwingUtilities.invokeLater(() ->
         programTable.addMouseListener(mouseAdapter));
     }
 
+    /**
+     * Display the description for a clicked episode
+     * @param event - MouseEvent
+     */
     public synchronized void displayEpisodeDescription(MouseEvent event) {
         SwingUtilities.invokeLater(() -> {
             int row = channelTable.rowAtPoint(event.getPoint());
@@ -282,13 +310,20 @@ public class Gui {
         });
     }
 
+    /**
+     * Update the hashmap that has the channels
+     * @param lhm
+     */
     public void update(LinkedHashMap<String, Channel> lhm){
         channels = lhm;
         updateChannelsShown();
-        //displayEpisodesFrom(currentChannelShown);
 
 
     }
+
+    /**
+     * Update all channels in the gui
+     */
     private void updateChannelsShown(){
         int i = 0;
         channelModel.setRowCount(0);
@@ -302,18 +337,31 @@ public class Gui {
         }
     }
 
+    /**
+     * Add listener to update-button
+     * @param listener - ActionListener to add
+     */
     public void addButtonListenerToUpdate(ActionListener listener) {
         update.addActionListener(listener);
     }
 
+    /**
+     * disable update-button
+     */
     public void disableUpdateButton() {
         update.setEnabled(false);
     }
 
+    /**
+     * Enable update-button
+     */
     public void enableUpdateButton() {
         update.setEnabled(true);
     }
 
+    /**
+     * This will show a popup when user press "help" button
+     */
     public void showPopupHelper() {
         String s = "Detta program hämtar alla radiokanaler från Sveriges " +
                 "Radio och visar dem till vänster." +

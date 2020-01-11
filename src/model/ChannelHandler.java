@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 /**
- * Handler used for parsing the XML file
+ * Class: ChannelHandler
+ *
  * @author David Irén
+ *
+ * Handler used for parsing the XML file with channels
  */
 public class ChannelHandler extends DefaultHandler {
 
@@ -58,7 +61,10 @@ public class ChannelHandler extends DefaultHandler {
 
     /**
      * This will be called every time parser encounters a value node
-     * */
+     * @param ch - char[]
+     * @param start - int
+     * @param length - int
+     */
     @Override
     public void characters(char[] ch, int start, int length) {
         String value = new String(ch,start,length).trim();
@@ -101,18 +107,33 @@ public class ChannelHandler extends DefaultHandler {
         }
     }
 
+    /**
+     * Checks top of stack
+     * @return - String
+     */
     public String currentElement(){
         return this.elementStack.peek();
     }
 
+    /**
+     * Getter for channel list
+     * @return - ArrayList
+     */
     public ArrayList<Channel> getChannelList() {
         return channelList;
     }
 
+    /**
+     * @return - boolean, if parser is done or not
+     */
     public boolean isFinished() {
         return finished;
     }
 
+    /**
+     * gets the next page of xml
+     * @return - URL
+     */
     public URL getNextPage() {
         return nextPage;
     }

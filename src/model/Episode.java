@@ -1,8 +1,14 @@
 package model;
 
-
 import java.net.URL;
 
+/**
+ * Class: Episode
+ *
+ * @author - David Irén
+ *
+ * Class to hold information about each episode
+ */
 public class Episode {
 
     private int id;
@@ -15,10 +21,16 @@ public class Episode {
     private URL imageURL;
     private boolean alreadyShown;
 
+    /**
+     * Constructor
+     */
     public Episode(){
 
     }
 
+    /**
+     * Getters and Setters
+     */
     public int getId() {
         return id;
     }

@@ -3,6 +3,14 @@ package model;
 import java.net.URL;
 import java.util.ArrayList;
 
+
+/**
+ * Class: Channel
+ *
+ * @author - David Irén
+ *
+ * Class to hold information about a program
+ */
 public class Channel {
     private int id;
     private String name;
@@ -16,11 +24,14 @@ public class Channel {
 
 
     /**
-     * Consturctor, where you have to initialize values later
+     * Constructor
      */
     public Channel(){
     }
 
+    /**
+     * Getters and Setters
+     */
     public int getId() {
         return id;
     }

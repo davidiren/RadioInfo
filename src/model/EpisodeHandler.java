@@ -15,19 +15,25 @@ import java.util.Locale;
 import java.util.Stack;
 
 /**
- * Handler used for parsing the XML file
+ * Class: EpisodeHandler
+ *
  * @author David Irén
+ *
+ * Handler used for parsing the XML files with episodes
  */
 public class EpisodeHandler extends DefaultHandler {
 
     private final Stack<String> elementStack = new Stack<>();
     private ArrayList<Episode> episodeList = new ArrayList<>();
     private int indexOfCurrentEpisode = 0;
-    private boolean finished = false;
-    private int pageNr;
-    private int nrOfPages;
-    private URL nextPage;
 
+    /**
+     * Start element in xml
+     * @param namespace - String
+     * @param localName - String
+     * @param qName - String
+     * @param attr - Attributes
+     */
     @Override
     public void startElement(String namespace, String localName, String qName,
                              Attributes attr) {
@@ -51,8 +57,8 @@ public class EpisodeHandler extends DefaultHandler {
 
     /**
      * Called when the end of an element is reached in the xml
-     * @param uri -
-     * @param localName -
+     * @param uri - String
+     * @param localName - String
      * @param qName - name of element
      */
     @Override
@@ -63,17 +69,9 @@ public class EpisodeHandler extends DefaultHandler {
             //hasEpisodeAired();
             indexOfCurrentEpisode++;
         }
-        if ("sr".equals(qName)) {
-            pageNr++;
-            if (pageNr > nrOfPages){
-                finished = true;
-            }
-        }
     }
 
-    private void hasEpisodeAired() {
-        //LocalDateTime now = LocalDateTime.now();
-
+    /*private void hasEpisodeAired() {
         try {
             Date today = new Date();
             String strDateFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -100,11 +98,14 @@ public class EpisodeHandler extends DefaultHandler {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * This will be called every time parser encounters a value node
-     * */
+     * @param ch - char[]
+     * @param start - int
+     * @param length - int
+     */
     @Override
     public void characters(char[] ch, int start, int length) {
         String value = new String(ch,start,length).trim();
@@ -112,16 +113,6 @@ public class EpisodeHandler extends DefaultHandler {
             return; // ignore whitespace
         }
         try {
-            //Create a zone to put into level
-            if ("page".equals(currentElement())) {
-                pageNr = Integer.parseInt(value);
-            }
-            if ("totalpages".equals(currentElement())) {
-                nrOfPages = Integer.parseInt(value);
-            }
-            if ("nextpage".equals(currentElement())) {
-                nextPage = new URL(value);
-            }
             if ("episodeid".equals(currentElement())) {
                 episodeList.get(indexOfCurrentEpisode)
                         .setId(Integer.parseInt(value));
@@ -144,24 +135,22 @@ public class EpisodeHandler extends DefaultHandler {
             }
         }catch (MalformedURLException e) {
             System.out.println("malformedURL: "+e.getLocalizedMessage());
-            //e.printStackTrace();
-            //System.exit(0);
         }
     }
 
+    /**
+     * checks top of element stack
+     * @return - String
+     */
     public String currentElement(){
         return this.elementStack.peek();
     }
 
+    /**
+     * getter for episode list
+     * @return - ArrayList
+     */
     public ArrayList<Episode> getEpisodeList() {
         return episodeList;
-    }
-
-    public boolean isFinished() {
-        return finished;
-    }
-
-    public URL getNextPage() {
-        return nextPage;
     }
 }

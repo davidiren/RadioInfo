@@ -12,14 +12,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * Class: ProgramLoader
+ *
+ * @author - David Irén
+ *
+ * Uses a SAXParser to parse the XML's gotten from the API
+ * calls from SverigesRadio
+ */
 public class ProgramLoader {
 
     ArrayList<Channel> channelList = new ArrayList<>();
 
+    /**
+     * Constructor
+     */
     public ProgramLoader(){
 
     }
 
+    /**
+     * Does the API calls and parses the XML's
+     */
     public void parsePrograms() {
         ChannelHandler handler = new ChannelHandler();
         EpisodeHandler episodeHandler = new EpisodeHandler();
@@ -40,8 +54,10 @@ public class ProgramLoader {
             //Adds all episodes to all channels
             URL episodesURL;
             String episodeString;
+            // to get all episodes in one xml-file
             String paginationFalse = "&pagination=false";
             for (Channel channel : channelList) {
+                //don't try to search episodes that doesn't exist
                 if (channel.getScheduleURL() == (null)){
                     continue;
                 }
@@ -52,7 +68,8 @@ public class ProgramLoader {
                 parser.parse(new InputSource(episodesURL.openStream()),
                         episodeHandler);
 
-                channel.setEpisodeList(new ArrayList<>(episodeHandler.getEpisodeList()));
+                channel.setEpisodeList(new ArrayList<>(
+                        episodeHandler.getEpisodeList()));
             }
 
         } catch (ParserConfigurationException pce) {
@@ -62,16 +79,21 @@ public class ProgramLoader {
             System.err.println("SAX error");
             se.printStackTrace();
         } catch (FileNotFoundException fne) {
-            System.out.println("WebbPage does not exist");
+            //System.out.println("Website does not exist");
+            //do nothing, website does not exist
         } catch (NullPointerException npe){
             System.out.println("this channel has no table");
         } catch (MalformedURLException e) {
             System.out.println("MalformedURL");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
     }
 
+    /**
+     * getter for the channel list
+     * @return - ArrayList
+     */
     public ArrayList<Channel> getChannelList() {
         return channelList;
     }

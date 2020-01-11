@@ -2,7 +2,13 @@ import model.Channel;
 
 import javax.swing.*;
 import java.util.LinkedHashMap;
-
+/**
+ * Class: RadioInfo
+ *
+ * @author - David Irén
+ *
+ * main class
+ */
 public class RadioInfo {
     public static void main(String[] args) {
         Controller c = new Controller();
@@ -16,6 +22,5 @@ public class RadioInfo {
                 c.setupGui(finalChannels);
             }
         });
-        System.out.println("Hejsan");
     }
 }
