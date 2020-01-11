@@ -93,10 +93,9 @@ public class Controller {
         ActionListener update = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            //gui.disableUpdateButton();
-            //Updater worker = new Updater(gui);
-            //worker.execute();
-                update();
+            gui.disableUpdateButton();
+            Updater worker = new Updater(gui);
+            worker.execute();
             }
         };
         gui.addButtonListenerToUpdate(update);
