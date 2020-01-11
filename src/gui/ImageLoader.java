@@ -45,7 +45,7 @@ public class ImageLoader {
 
             } catch (IOException e) {
                 return imageStorage.get("images/nopic.png").getScaledInstance(
-                        50,50, Image.SCALE_SMOOTH);
+                        200,200, Image.SCALE_SMOOTH);
             }
         }
     }
@@ -61,7 +61,7 @@ public class ImageLoader {
 
             } catch (IOException e) {
                 return imageStorage.get("images/nopic.png").getScaledInstance(
-                        50,50, Image.SCALE_SMOOTH);
+                        200,200, Image.SCALE_SMOOTH);
             }
         }
     }
@@ -82,7 +82,7 @@ public class ImageLoader {
             }
         } catch (IOException | NullPointerException e) {
             return imageStorage.get("images/nopic.png").getScaledInstance(
-                    50,50, Image.SCALE_SMOOTH);
+                    200,200, Image.SCALE_SMOOTH);
         }
     }
 }

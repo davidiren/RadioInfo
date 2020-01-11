@@ -93,7 +93,7 @@ public class Gui {
         episodeImage = new JLabel(new ImageIcon(im));
         episodeDescriptionPanel.add(episodeImage, BorderLayout.WEST);
         episodeDescription = new JTextArea();
-        episodeDescription.append("Tryck på ett program sedan så kommer informationen här");
+        episodeDescription.append("\nTryck på ett program sedan så kommer informationen här");
         episodeDescription.setEditable(false);
         episodeDescriptionPanel.add(episodeDescription, BorderLayout.CENTER);
 
@@ -220,7 +220,7 @@ public class Gui {
         Image img;
         img = ImageLoader.getImageLoader().getScaledImageFromUrl(
                 episode.getImageURL(), 200, 200);
-        episodeImage = new JLabel(new ImageIcon(img));
+        episodeImage.setIcon(new ImageIcon(img));// = new JLabel(new ImageIcon(img));
         episodeDescription.selectAll();
         episodeDescription.replaceSelection(episode.getTitle()+": \n\n");
         episodeDescription.append(episode.getDescription());
@@ -322,7 +322,7 @@ public class Gui {
                 "rödmarkerat i tablån är de program som redan har redan " +
                 "har gått.\n Trycker du på ett program så kommer " +
                 "programmets beskrivning presenteras i rutan längst ner \n" +
-                "Detfinns en uppdatera-knapp som kommer att " +
+                "Det finns en uppdatera-knapp som kommer att " +
                 "uppdatera om alla kanaler.\n Utöver det så kommer allt att " +
                 "automatiskt uppdateras en gång varje timme.";
         JOptionPane.showMessageDialog(frame, s);
