@@ -171,11 +171,20 @@ public class Gui {
         //This will insert a row with name of episode,
         //start and endtime for that episode, into the table
         for (Episode e:channels.get(channel).getEpisodeList()) {
+            String startTime =
+                    e.getStartTime().substring(0,
+                            e.getStartTime().indexOf("T"));
+            String endTime =
+                    e.getEndTime().substring(0,
+                            e.getEndTime().indexOf("T"));
+            startTime =
+                    startTime + " "+e.getStartTime().substring(e.getStartTime()
+                            .indexOf("T")+1, e.getStartTime().indexOf("Z"));
+            endTime =
+                    endTime + " "+e.getEndTime().substring(e.getEndTime()
+                            .indexOf("T")+1, e.getEndTime().indexOf("Z"));
             programModel.insertRow(i, new Object[]{e.getProgramName(),
-                    e.getStartTime().substring(e.getStartTime().indexOf("T") + 1,
-                            e.getStartTime().indexOf("Z")),
-                    e.getEndTime().substring(e.getEndTime().indexOf("T") + 1,
-                            e.getEndTime().indexOf("Z"))});
+                    startTime, endTime});
 
             i++;
         }
@@ -275,7 +284,7 @@ public class Gui {
      */
     public synchronized void displayEpisodes(MouseEvent event) {
         SwingUtilities.invokeLater(() -> {
-            int row = channelTable.rowAtPoint(event.getPoint());
+            int row = channelTable.getSelectedRow();
             int col = 0; //first column has name of ep
             displayEpisodesFrom(channelTable.getValueAt(row, col).toString());
             currentChannelShown =
@@ -299,7 +308,7 @@ public class Gui {
      */
     public synchronized void displayEpisodeDescription(MouseEvent event) {
         SwingUtilities.invokeLater(() -> {
-            int row = channelTable.rowAtPoint(event.getPoint());
+            int row = programTable.getSelectedRow();
             System.out.println("Current channel: "+currentChannelShown+" " +
                     "rowNr: "+row+ " Episodes in current channel: "+channels.get(currentChannelShown).getEpisodeList().size()+" Number of Rows in table: "+ programTable.getRowCount());
             //this will always give me the name of the episode
@@ -317,6 +326,8 @@ public class Gui {
     public void update(LinkedHashMap<String, Channel> lhm){
         channels = lhm;
         updateChannelsShown();
+        displayEpisodesFrom(currentChannelShown);
+        //programModel.setRowCount(0);
 
 
     }

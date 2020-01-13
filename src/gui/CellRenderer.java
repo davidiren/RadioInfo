@@ -37,7 +37,7 @@ class CellRenderer extends DefaultTableCellRenderer {
 
         try {
             Date today = new Date();
-            String strDateFormat = "HH:mm:ss";
+            String strDateFormat = "yyyy-MM-dd HH:mm:ss";
             SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
             String formatedToday = sdf.format(today);
 

@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +24,7 @@ import java.util.ArrayList;
  */
 public class ProgramLoader {
 
-    ArrayList<Channel> channelList = new ArrayList<>();
+    private ArrayList<Channel> channelList = new ArrayList<>();
 
     /**
      * Constructor
@@ -54,15 +56,25 @@ public class ProgramLoader {
             //Adds all episodes to all channels
             URL episodesURL;
             String episodeString;
-            // to get all episodes in one xml-file
-            String paginationFalse = "&pagination=false";
+            //Do this to get 12h before and after
+            LocalDateTime ldt = LocalDateTime.now();
+            LocalDateTime minus = ldt.minusHours(12);
+            LocalDateTime plus = ldt.plusHours(12);
+            //format for correct api-call
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String twelveBefore = minus.format(dtf);
+            String twelveAfter = plus.format(dtf);
+            // to get all episodes in one xml-file, 12h before
+            // and 12h after current time
+            String everything = "&fromdate="+twelveBefore+"&todate="+twelveAfter +
+                    "&pagination=false";
             for (Channel channel : channelList) {
                 //don't try to search episodes that doesn't exist
                 if (channel.getScheduleURL() == (null)){
                     continue;
                 }
                 episodeString = channel.getScheduleURL().toString();
-                episodeString = episodeString + paginationFalse;
+                episodeString = episodeString + everything;
                 episodesURL = new URL(episodeString);
                 System.out.println(channel.getName());
                 parser.parse(new InputSource(episodesURL.openStream()),

@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -29,7 +31,26 @@ public class SverigesRadio {
     public void setUp(){
         programLoader.parsePrograms();
         channelList = programLoader.getChannelList();
+        fixEpisodeTweleveBeforeAndAfter();
         createHashMap();
+
+    }
+
+    private void fixEpisodeTweleveBeforeAndAfter() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime twelveAgo = now.minusHours(12);
+        LocalDateTime twelveTo = now.plusHours(12);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH" +
+                ":mm:ss'Z'");
+        for (Channel c:channelList) {
+            c.getEpisodeList().removeIf(episode -> {
+                LocalDateTime checkThis =
+                        LocalDateTime.parse(episode.getEndTime().substring(0,
+                         episode.getEndTime().length()-1));
+                return twelveAgo.isAfter(checkThis) || twelveTo.isBefore(checkThis);
+            });
+
+        }
     }
 
     /**
