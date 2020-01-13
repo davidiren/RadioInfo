@@ -26,7 +26,7 @@ public class ImageLoader {
      */
     public ImageLoader(){
         try {
-            String imageName = "images/nopic.png";
+            String imageName = "nopic.png";
             Image im = ImageIO.read(
                     ClassLoader.getSystemResourceAsStream(imageName));
             imageStorage.put(imageName, im);
@@ -66,7 +66,7 @@ public class ImageLoader {
 
             } catch (IOException e) {
                 //cant find image, show the "noimage" image
-                return imageStorage.get("images/nopic.png").getScaledInstance(
+                return imageStorage.get("nopic.png").getScaledInstance(
                         200,200, Image.SCALE_SMOOTH);
             }
         }
@@ -97,7 +97,7 @@ public class ImageLoader {
             }
         } catch (IOException | NullPointerException e) {
             //cant find image, show the "noimage" image
-            return imageStorage.get("images/nopic.png").getScaledInstance(
+            return imageStorage.get("nopic.png").getScaledInstance(
                     200,200, Image.SCALE_SMOOTH);
         }
     }

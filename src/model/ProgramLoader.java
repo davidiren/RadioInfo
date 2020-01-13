@@ -76,7 +76,6 @@ public class ProgramLoader {
                 episodeString = channel.getScheduleURL().toString();
                 episodeString = episodeString + everything;
                 episodesURL = new URL(episodeString);
-                System.out.println(channel.getName());
                 parser.parse(new InputSource(episodesURL.openStream()),
                         episodeHandler);
 

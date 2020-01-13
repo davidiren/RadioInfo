@@ -96,7 +96,7 @@ public class Gui {
         episodeDescriptionPanel = new JPanel();
         episodeDescriptionPanel.setLayout(new BorderLayout());
         Image im = ImageLoader.getImageLoader().getScaledImage(
-                "images/nopic.png",200, 200);
+                "nopic.png",200, 200);
         episodeImage = new JLabel(new ImageIcon(im));
         episodeDescriptionPanel.add(episodeImage, BorderLayout.WEST);
         episodeDescription = new JTextArea();
@@ -221,7 +221,7 @@ public class Gui {
         srPanel.setLayout(new BorderLayout());
         Image img;
         img = ImageLoader.getImageLoader().getScaledImage(
-                "images/sverigesradio.jpg", 400, 100);
+                "SverigesRadio.jpg", 400, 100);
         JLabel pic = new JLabel(new ImageIcon(img));
         srPanel.add(pic, BorderLayout.CENTER);
         srPanel.add(update, BorderLayout.EAST);
@@ -309,8 +309,6 @@ public class Gui {
     public synchronized void displayEpisodeDescription(MouseEvent event) {
         SwingUtilities.invokeLater(() -> {
             int row = programTable.getSelectedRow();
-            System.out.println("Current channel: "+currentChannelShown+" " +
-                    "rowNr: "+row+ " Episodes in current channel: "+channels.get(currentChannelShown).getEpisodeList().size()+" Number of Rows in table: "+ programTable.getRowCount());
             //this will always give me the name of the episode
             //will not need column
             updateEpisodeDescriptionPanel(channels.get(
@@ -327,7 +325,6 @@ public class Gui {
         channels = lhm;
         updateChannelsShown();
         displayEpisodesFrom(currentChannelShown);
-        //programModel.setRowCount(0);
 
 
     }
