@@ -93,12 +93,17 @@ public class ProgramLoader {
         } catch (FileNotFoundException fne) {
             //System.out.println("Website does not exist");
             //do nothing, website does not exist
+            //will not be shown to user
         } catch (NullPointerException npe){
             System.out.println("this channel has no table");
         } catch (MalformedURLException e) {
-            System.out.println("MalformedURL");
+            //System.out.println("MalformedURL");
+            //This will only occur when the api gives a
+            //faulty URL, this will be handled by not showing
+            //that specific channel to the user
         } catch (IOException e) {
-            System.out.println(e.getLocalizedMessage());
+            System.out.println("Cant fetch programs from SR, Check internet " +
+                    "connection");
         }
     }
 

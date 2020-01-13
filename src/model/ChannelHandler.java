@@ -103,7 +103,9 @@ public class ChannelHandler extends DefaultHandler {
                 channelList.get(indexOfCurrentChannel).setChannelType(value);
             }
         }catch (MalformedURLException e) {
-            System.out.println("malformedURL: "+e.getMessage());
+            //URL is malformed, will be handled later in the process
+            //by showing a "noimage" image or not showing channel
+            //depending on which URL is faulty
         }
     }
 

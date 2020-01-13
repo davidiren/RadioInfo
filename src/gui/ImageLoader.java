@@ -65,6 +65,7 @@ public class ImageLoader {
                 return im.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
             } catch (IOException e) {
+                //cant find image, show the "noimage" image
                 return imageStorage.get("images/nopic.png").getScaledInstance(
                         200,200, Image.SCALE_SMOOTH);
             }
@@ -95,6 +96,7 @@ public class ImageLoader {
 
             }
         } catch (IOException | NullPointerException e) {
+            //cant find image, show the "noimage" image
             return imageStorage.get("images/nopic.png").getScaledInstance(
                     200,200, Image.SCALE_SMOOTH);
         }

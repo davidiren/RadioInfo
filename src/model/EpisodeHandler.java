@@ -64,41 +64,11 @@ public class EpisodeHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) {
         this.elementStack.pop();
-        // A level has been made, move to levelList
+        //An episode is done increment index
         if ("scheduledepisode".equals(qName)) {
-            //hasEpisodeAired();
             indexOfCurrentEpisode++;
         }
     }
-
-    /*private void hasEpisodeAired() {
-        try {
-            Date today = new Date();
-            String strDateFormat = "yyyy-MM-dd'T'HH:mm:ss";
-            SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
-            String formatedToday = sdf.format(today);
-
-            Date now = sdf.parse(formatedToday);
-
-            String endTime =
-                    episodeList.get(indexOfCurrentEpisode).getEndTime();
-            String epDate = endTime.substring(0, endTime.indexOf("Z"));
-            Date ep;
-            SimpleDateFormat another = new SimpleDateFormat(strDateFormat);
-                    ep = another.parse(epDate);
-
-            if (now.compareTo(ep) > 0) {
-                episodeList.get(indexOfCurrentEpisode).setAlreadyShown(true);
-            } else if (now.compareTo(ep) < 0) {
-                episodeList.get(indexOfCurrentEpisode).setAlreadyShown(false);
-            } else {
-                episodeList.get(indexOfCurrentEpisode).setAlreadyShown(true);
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     /**
      * This will be called every time parser encounters a value node
@@ -134,7 +104,8 @@ public class EpisodeHandler extends DefaultHandler {
                         .setImageURL(new URL(value));
             }
         }catch (MalformedURLException e) {
-            System.out.println("malformedURL: "+e.getLocalizedMessage());
+            //This means that an image does not exist for the episode
+            //Will be handled elsewhere by showing a "noimage" image
         }
     }
 
